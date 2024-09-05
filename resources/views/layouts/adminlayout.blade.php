@@ -3,7 +3,10 @@
 @include('partials.head')
 
 <body>
-    @include('layouts.navigation')
+    <!-- Main content -->
+    <!-- Navigation -->
+    @include('partials.header')
+    @include('partials.navigation')
 
     <!-- Page content -->
     <main class="p-0 m-0">

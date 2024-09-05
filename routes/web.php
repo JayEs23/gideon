@@ -26,11 +26,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $totalStudents =  234; //\App\Models\Student::count();
+    $totalStudents = \App\Models\Student::count();
     $totalApps =  314; //\App\Models\App::count();
-    $totalCourses =  231; //\App\Models\Course::count();
+    $totalCourses = \App\Models\Course::count();
     $totalPortfolios =  34; //\App\Models\Portfolio::count();
-    $totalProjects =  2364; //\App\Models\Project::count();
+    $totalProjects =  \App\Models\Project::count();
     return view('dashboard')
         ->with('totalStudents', $totalStudents)
         ->with('totalApps', $totalApps)
@@ -51,4 +51,4 @@ Route::middleware('auth')->group(function () {
     Route::resource('projects', ProjectController::class);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
