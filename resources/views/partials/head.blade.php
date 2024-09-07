@@ -19,7 +19,7 @@
 
     <script src="{{ asset('assets/js/vendors/darkMode.js') }}"></script>
 
-    <title>@yield('title', ' Dashboard') | Learning Management System</title>
+    <title>@yield('title', ' Learning Management System')</title>
     <link rel="canonical" href="@yield('canonical', url()->current())" />
     @stack('styles') <!-- For additional styles if needed -->
 </head>

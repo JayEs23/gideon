@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class CourseCategoryController extends Controller
 {
+    // CourseCategoryController.php
+
     public function index()
     {
         $categories = CourseCategory::all();
@@ -21,38 +23,40 @@ class CourseCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:course_categories',
-            'description' => 'nullable',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
         CourseCategory::create($request->all());
-        return redirect()->route('course_categories.index')->with('success', 'Category created successfully.');
+
+        return redirect()->route('course-categories.index')->with('success', 'Category created successfully.');
     }
 
-    public function show(CourseCategory $courseCategory)
+    public function edit(CourseCategory $category)
     {
-        return view('course_categories.show', compact('courseCategory'));
+        return view('course_categories.edit', compact('category'));
     }
 
-    public function edit(CourseCategory $courseCategory)
-    {
-        return view('course_categories.edit', compact('courseCategory'));
-    }
-
-    public function update(Request $request, CourseCategory $courseCategory)
+    public function update(Request $request, CourseCategory $category)
     {
         $request->validate([
-            'name' => 'required|unique:course_categories,name,' . $courseCategory->id,
-            'description' => 'nullable',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
-        $courseCategory->update($request->all());
-        return redirect()->route('course_categories.index')->with('success', 'Category updated successfully.');
+        $category->update($request->all());
+
+        return redirect()->route('course-categories.index')->with('success', 'Category updated successfully.');
     }
 
-    public function destroy(CourseCategory $courseCategory)
+    public function show(CourseCategory $category)
     {
-        $courseCategory->delete();
-        return redirect()->route('course_categories.index')->with('success', 'Category deleted successfully.');
+        return view('course_categories.show', compact('category'));
+    }
+
+    public function destroy(CourseCategory $category)
+    {
+        $category->delete();
+        return redirect()->route('course-categories.index')->with('success', 'Category deleted successfully.');
     }
 }

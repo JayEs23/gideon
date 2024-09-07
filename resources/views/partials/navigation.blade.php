@@ -18,7 +18,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarCourses" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarCourses">
                         <li><a class="dropdown-item" href="{{ url('/courses') }}">All Courses</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/courses/categories') }}">Course Categories</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/course/categories') }}">Course Categories</a></li>
                     </ul>
                 </li>
 

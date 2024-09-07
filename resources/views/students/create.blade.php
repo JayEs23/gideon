@@ -1,21 +1,28 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Student') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('students.store') }}" method="POST">
-                        @csrf
-                        <!-- Form fields for student creation -->
-                        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Create</button>
-                    </form>
-                </div>
-            </div>
+@section('content')
+<div class="container">
+    <h1>Add Student</h1>
+
+    <form action="{{ route('students.store') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" required>
         </div>
-    </div>
-</x-app-layout>
+        <div class="form-group">
+            <label for="code">Code</label>
+            <input type="text" name="code" id="code" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+@endsection

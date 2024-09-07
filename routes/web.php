@@ -8,6 +8,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\CourseCategoryController;
 
 
 /*
@@ -48,7 +49,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('apps', AppController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('portfolios', PortfolioController::class);
+    Route::resource('course/categories', CourseCategoryController::class);
+
     Route::resource('projects', ProjectController::class);
+
+    // Students routes
+    Route::resource('students', StudentController::class);
+
+    // Student course assignments
+    Route::get('students/{student}/courses', [StudentController::class, 'courses'])->name('students.courses');
+    Route::post('students/{student}/courses', [StudentController::class, 'assignCourse'])->name('students.assignCourse');
 });
 
 require __DIR__ . '/auth.php';

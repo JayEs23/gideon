@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::all();
+        // Fetch students with pagination, e.g., 10 students per page
+        $students = Student::paginate(4);
         return view('students.index', compact('students'));
     }
+
 
     public function create()
     {
@@ -21,18 +24,30 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:students',
-            'password' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:students',
+            'password' => 'required|string|min:8',
         ]);
 
-        Student::create($request->all());
+        $code = $this->generateUniqueCode();
+
+        Student::create([
+            'name' => $request->name,
+            'code' => $code,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
-    public function show(Student $student)
+    private function generateUniqueCode()
     {
-        return view('students.show', compact('student'));
+        do {
+            $code = 'ACETECH-' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+        } while (Student::where('code', $code)->exists());
+
+        return $code;
     }
 
     public function edit(Student $student)
@@ -43,17 +58,50 @@ class StudentController extends Controller
     public function update(Request $request, Student $student)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:students,email,' . $student->id,
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:students,email,' . $student->id,
+            'password' => 'nullable|string|min:8',
         ]);
 
-        $student->update($request->all());
+        // Prepare data for update
+        $data = $request->only(['name', 'email']); // Get only name and email fields
+
+        // Check if password is provided
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->input('password'));
+        }
+
+        // Update the student record
+        $student->update($data);
+
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
+
+    public function show(Student $student)
+    {
+        $student->load('courses');
+        $courses = Course::all();
+        return view('students.show', compact('student', 'courses'));
+    }
+
 
     public function destroy(Student $student)
     {
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+    }
+
+    public function assignCourse(Request $request, Student $student)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        $student->courses()->attach($request->course_id, [
+            'enrollment_date' => now(),
+            'status' => 'enrolled'
+        ]);
+
+        return redirect()->route('students.show', $student)->with('success', 'Course assigned successfully.');
     }
 }

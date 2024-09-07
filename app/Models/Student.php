@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Student extends Model
 {
@@ -11,6 +12,7 @@ class Student extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'email',
         'password',
         'profile_picture',
@@ -18,9 +20,16 @@ class Student extends Model
         'status',
     ];
 
+    protected $casts = [
+        'enrollment_date' => 'date',
+    ];
+    protected $dates = ['enrollment_date']; // Ensure Laravel treats this as a date
+
     public function courses()
     {
-        return $this->belongsToMany(Course::class)->withPivot('enrollment_date', 'completion_date', 'status');
+        return $this->belongsToMany(Course::class, 'course_student')
+            ->withPivot('enrollment_date', 'completion_date', 'status')
+            ->withTimestamps();
     }
 
     public function submissions()
@@ -36,5 +45,17 @@ class Student extends Model
     public function certifications()
     {
         return $this->hasMany(Certification::class);
+    }
+
+    // Accessor for the number of courses
+    public function getCoursesCountAttribute()
+    {
+        return $this->courses()->count();
+    }
+
+    // Accessor for formatted enrollment date
+    public function getFormattedEnrollmentDateAttribute()
+    {
+        return $this->enrollment_date ? $this->enrollment_date->format('d M, Y') : 'N/A';
     }
 }

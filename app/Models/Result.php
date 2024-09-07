@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Result extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'student_id',
+        'course_id',
+        'total_grade',
+        'status',
+    ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

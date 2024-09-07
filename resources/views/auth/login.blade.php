@@ -1,47 +1,95 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.guest')
+@section('title', 'Gideon Ihuarulam Platform | Login')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+@section('content')
+<section class="container d-flex flex-column vh-100">
+    <div class="row align-items-center justify-content-center g-0 h-lg-100 py-8">
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <!-- Card -->
+            <div class="card shadow">
+                <!-- Card body -->
+                <div class="card-body p-6 d-flex flex-column gap-4">
+                    <div>
+                        <a href="{{ url('/') }}">
+                            <img src="{{ asset('assets/img/logo.png') }}" class="mb-4" alt="logo-icon" />
+                        </a>
+                        <div class="d-flex flex-column gap-1">
+                            <h1 class="mb-0 fw-bold">Sign in</h1>
+                            <span>
+                                Don’t have an account?
+                                <a href="{{ route('register') }}" class="ms-1">Sign up</a>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Form -->
+                    <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
+                        @csrf
+                        <!-- Email Address -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email address here" required autofocus autocomplete="username" />
+                            @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="**************" required autocomplete="current-password" />
+                            @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!-- Remember Me -->
+                        <div class="d-lg-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="remember_me" name="remember" />
+                                <label class="form-check-label" for="remember_me">Remember me</label>
+                            </div>
+                            @if (Route::has('password.request'))
+                            <div>
+                                <a href="{{ route('password.request') }}">Forgot your password?</a>
+                            </div>
+                            @endif
+                        </div>
+                        <div>
+                            <!-- Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Log in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+</section>
+<div class="position-absolute bottom-0 m-4">
+    <div class="dropdown">
+        <button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+            <i class="bi theme-icon-active"></i>
+            <span class="visually-hidden bs-theme-text">Toggle theme</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bs-theme-text">
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                    <i class="bi theme-icon bi-sun-fill"></i>
+                    <span class="ms-2">Light</span>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                    <i class="bi theme-icon bi-moon-stars-fill"></i>
+                    <span class="ms-2">Dark</span>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+                    <i class="bi theme-icon bi-circle-half"></i>
+                    <span class="ms-2">Auto</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+@endsection

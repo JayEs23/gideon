@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Certification extends Model
+class CourseStudent extends Pivot
 {
-    use HasFactory;
+    protected $table = 'course_student';
 
     protected $fillable = [
         'student_id',
         'course_id',
-        'issued_at',
-        'certificate_path',
+        'enrollment_date',
+        'completion_date',
+        'status',
     ];
 
     public function student()

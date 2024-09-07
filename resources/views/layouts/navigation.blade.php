@@ -49,7 +49,7 @@
         </a>
         <!-- Mobile view nav wrap -->
         <div class="ms-auto d-flex align-items-center order-lg-3">
-            <a href="{{url('/enquiries')}}" class="btn btn-primary">Enquire with us now</a>
+            <a href="{{url('/enquiries')}}" class="btn btn-primary">Get in touch</a>
         </div>
         <div>
             <!-- Button -->
